@@ -25,9 +25,9 @@ if (!("Age" %in% colnames(vdp_data)) || !("VDP" %in% colnames(vdp_data))) {
   
   # Add a linear regression line (all data - ignore color i.e. Sex here)
   p60 <- p60 + geom_smooth(data = subset(vdp_data, !is.na(VDP)), aes(group = 1), method = "lm",
-                       size = 2, show.legend = FALSE, se = TRUE)
+                           linewidth = 2, show.legend = FALSE, se = TRUE)
   #to add separate line based on color
-  #p60 + geom_smooth(method = "lm", se = TRUE, size=1, aes(group = Sex,color = Sex))
+  #p60 + geom_smooth(method = "lm", se = TRUE, linewidth=1, aes(group = Sex,color = Sex))
   
   # Calculate the coefficients for the linear regression model
   lm_model <- lm(VDP ~ Age, data = vdp_data)
@@ -35,12 +35,16 @@ if (!("Age" %in% colnames(vdp_data)) || !("VDP" %in% colnames(vdp_data))) {
   slope <- coef(lm_model)[2]
   
   # Add the equation to the plot
-  p60 <- p60 + geom_text(aes(x = 10, y = 12, label = paste("Y = ", round(intercept, 2), " + ", round(slope, 2), "X")),
-                     size = 5, color = "black")
+  p60 <- p60 + geom_text(aes(x = 30, y = 14, label = paste("y=",round(slope, 2),"x","+ (", round(intercept, 2),")")),
+                     size = 6, color = "black")
   
   # Print the plot
-  print(p)
+  print(p60)
 }
+
+# Calculate the coefficients for the linear regression model
+lm_model <- lm(VDP ~ Age, data = vdp_data)
+print(lm_model)
 
 # Create a jittered boxplot comparing VDP between Males (M) and Females (F): VDP 60%
 p_jitter <- ggboxplot(vdp_data, x = "Sex", y = "VDP",
@@ -91,8 +95,12 @@ if (!("Age" %in% colnames(percentile_data)) || !("DefectP" %in% colnames(percent
 # Add a linear regression line (all data - ignore color i.e. Sex here)
 p + geom_smooth(data = subset(percentile_data, !is.na(DefectP)), aes(group = 1), method = "lm",
                 size=2, show.legend = FALSE, se = TRUE)
-#to add separate line based on color
+#to add separate line colored based on sex
 p + geom_smooth(method = "lm", se = TRUE, size=1, aes(group = Sex,color = Sex))
+
+# Calculate the coefficients for the linear regression model
+lm_model <- lm(DefectP ~ Age, data = percentile_data)
+print(lm_model)
 
 # Create a jittered boxplot comparing VDP between Males (M) and Females (F): 99th percentile
 p_jitter <- ggboxplot(percentile_data, x = "Sex", y = "DefectP",
@@ -146,6 +154,10 @@ p + geom_smooth(data = subset(median_data, !is.na(DefectP)), aes(group = 1), met
                 size=2, show.legend = FALSE, se = TRUE)
 #to add separate line based on color
 p + geom_smooth(method = "lm", se = TRUE, size=1, aes(group = Sex,color = Sex))
+
+# Calculate the coefficients for the linear regression model
+lm_model <- lm(DefectP ~ Age, data = median_data)
+print(lm_model)
 
 # Create a jittered boxplot comparing VDP between Males (M) and Females (F): median normalized
 p_jitter <- ggboxplot(median_data, x = "Sex", y = "DefectP",
