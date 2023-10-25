@@ -5,8 +5,15 @@ install.packages("viridis")
 install.packages("hrbrthemes")
 install.packages("tidyverse")
 
-my_data <- read.csv(file.choose())
-head(my_data)
+# Define the path to the directory containing data file
+data_directory <- "C:/Users/HUSDQ4/OneDrive - cchmc/cincy_work/human_data/VDP_analysis/CFNonCF_Bronch/IRC740H_2Dspiral_CF"
+# Set the working directory to the data directory
+setwd(data_directory)
+
+################################################################################
+# Read the CSV file for VDP 60% data
+vdp_file_name <- "" #(insert name)
+vdp_data <- read.csv(vdp_file_name)
 
 library("ggpubr")
 ggboxplot(my_data, x = "vdp", y = "N4_vdp", 
