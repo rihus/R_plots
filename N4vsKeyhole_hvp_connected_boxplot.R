@@ -17,7 +17,7 @@ keyhole_vdp60 <- read.csv("keyhole_vdp60_analysis_results.csv")
 N4_vdp60 <- read.csv("N4_vdp60_analysis_results.csv")
 
 # Create a combined data frame with an indicator for the Correction of the data
-keyhole_vdp60$Correction <- "Keyhole"
+keyhole_vdp60$Correction <- "FA"
 N4_vdp60$Correction <- "N4"
 vdp60_combined <- rbind(keyhole_vdp60, N4_vdp60)
 
@@ -30,7 +30,7 @@ stat.test
 p_bxp60 <-  ggpaired(vdp60_combined, x = "Correction", y = "HyperP", fill = "Correction",
                      palette = c("#095859", "#DB9C60"), width = 0.5, point.size = 2, point.color="Subject",
                      ylim = c(0, 8), line.color = "gray", line.size = 0.5,
-                     legend = "none", ylab = "HVP (%)", xlab = "Correction Method") + #
+                     legend = "none", ylab = "HVP (%)", xlab = "Correction Method") + # 
   theme(panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
         axis.text = element_text(size = 22, color = "black", face = "bold"),
         axis.title = element_text(size = 22, color = "black", face = "bold"))#,
@@ -49,7 +49,7 @@ ggsave("Rplot_N4vsFA_hvp60_bxp_connected.png", plot = p_bxp60, width = 4.25, hei
 keyhole_99percentile <- read.csv("keyhole_percentile_analysis_results.csv")
 N4_99percentile <- read.csv("N4_percentile_analysis_results.csv")
 # Create a combined data frame with an indicator for the Correction of the data
-keyhole_99percentile$Correction <- "Keyhole"
+keyhole_99percentile$Correction <- "FA"
 N4_99percentile$Correction <- "N4"
 percentile_combined <- rbind(keyhole_99percentile, N4_99percentile)
 ##Statistical test
@@ -77,7 +77,7 @@ ggsave("Rplot_N4vsFA_hvpprcntl_bxp_connected.png", plot = p_bxp_prcntl, width = 
 keyhole_median <- read.csv("keyhole_median_analysis_results.csv")
 N4_median <- read.csv("N4_median_analysis_results.csv")
 # Create a combined data frame with an indicator for the Correction of the data
-keyhole_median$Correction <- "Keyhole"
+keyhole_median$Correction <- "FA"
 N4_median$Correction <- "N4"
 median_combined <- rbind(keyhole_median, N4_median)
 ##Statistical test

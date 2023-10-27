@@ -49,7 +49,7 @@ if (!("Age" %in% colnames(vdp_data)) || !("VDP" %in% colnames(vdp_data))) {
 
 # Calculate the coefficients for the linear regression model
 lm_model <- lm(VDP ~ Age, data = vdp_data)
-print(lm_model)
+summary(lm_model)
 
 # Create a jittered boxplot comparing VDP between Males (M) and Females (F): VDP 60%
 p_jitter <- ggboxplot(vdp_data, x = "Sex", y = "VDP",
@@ -106,7 +106,7 @@ p + geom_smooth(data = subset(percentile_data, !is.na(DefectP)), aes(group = 1),
 
 # Calculate the coefficients for the linear regression model
 lm_model <- lm(DefectP ~ Age, data = percentile_data)
-print(lm_model)
+summary(lm_model)
 
 # Create a jittered boxplot comparing VDP between Males (M) and Females (F): 99th percentile
 p_jitter <- ggboxplot(percentile_data, x = "Sex", y = "DefectP",
@@ -222,7 +222,7 @@ p + geom_smooth(data = subset(gamlss_data, !is.na(DefectP)), aes(group = 1), met
 
 # Calculate the coefficients for the linear regression model
 lm_model <- lm(DefectP ~ Age, data = gamlss_data)
-print(lm_model)
+summary(lm_model)
 
 # Create a jittered boxplot comparing VDP between Males (M) and Females (F): median normalized
 p_jitter <- ggboxplot(gamlss_data, x = "Sex", y = "DefectP",
@@ -280,7 +280,7 @@ p + geom_smooth(data = subset(glb_data, !is.na(DefectP)), aes(group = 1), method
 
 # Calculate the coefficients for the linear regression model
 lm_model <- lm(DefectP ~ Age, data = glb_data)
-print(lm_model)
+summary(lm_model)
 
 # Create a jittered boxplot comparing VDP between Males (M) and Females (F): median normalized
 p_jitter <- ggboxplot(glb_data, x = "Sex", y = "DefectP",
@@ -309,3 +309,60 @@ p_jitter <- p_jitter + theme(axis.line = element_line(colour = "black"),
 
 # Print the plot
 print(p_jitter)
+
+######################################################################################################
+##Compare collection of VDP from gamlss and glb
+# Create a function to categorize age
+categorize_age <- function(age) {
+  if (age < 20) {
+    return("Young")
+  } else if (age >= 20 && age <= 50) {
+    return("Middle")
+  } else {
+    return("Old")
+  }
+}
+
+# Apply the categorization to both data frames
+gamlss_data$Age_Category <- sapply(gamlss_data$Age, categorize_age)
+glb_data$Age_Category <- sapply(glb_data$Age, categorize_age)
+
+# Create separate data frames for Young and Old categories
+young_gamlss <- gamlss_data[gamlss_data$Age_Category == "Young", ]
+old_gamlss <- gamlss_data[gamlss_data$Age_Category == "Old", ]
+young_glb <- glb_data[glb_data$Age_Category == "Young", ]
+old_glb <- glb_data[glb_data$Age_Category == "Old", ]
+
+# Compare DefectP for the 'Old' category between gamlss_data and glb_data
+old_gamlss_defectp <- old_gamlss$DefectP
+old_glb_defectp <- old_glb$DefectP
+
+# Create a combined dataframe
+combined_data <- data.frame(
+  Source = rep(c("gamlss_data", "glb_data"), each = length(old_gamlss_defectp)),
+  DefectP = c(old_gamlss_defectp, old_glb_defectp)
+)
+
+# Boxplot to compare the 'Old' category
+boxplot(DefectP ~ Source, data = combined_data, main = "Old - gamlss_data vs. glb_data", col = c("blue", "red"), outline = FALSE)
+
+# Perform a Wilcoxon signed-rank test
+wilcox_result <- wilcox.test(DefectP ~ Source, data = combined_data, paired = TRUE)
+wilcox_result
+############################################
+# Compare DefectP for the 'Young' category between gamlss_data and glb_data
+young_gamlss_defectp <- young_gamlss$DefectP
+young_glb_defectp <- young_glb$DefectP
+
+# Create a combined dataframe
+combined_data <- data.frame(
+  Source = rep(c("gamlss_data", "glb_data"), each = length(young_gamlss_defectp)),
+  DefectP = c(young_gamlss_defectp, young_glb_defectp)
+)
+
+# Boxplot to compare the 'young' category
+boxplot(DefectP ~ Source, data = combined_data, main = "Young - gamlss_data vs. glb_data", col = c("blue", "red"), outline = FALSE)
+
+# Perform a Wilcoxon signed-rank test
+wilcox_result <- wilcox.test(DefectP ~ Source, data = combined_data, paired = TRUE)
+wilcox_result
