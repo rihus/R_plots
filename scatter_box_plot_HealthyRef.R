@@ -253,7 +253,7 @@ p_jitter <- p_jitter + theme(axis.line = element_line(colour = "black"),
 print(p_jitter)
 
 ################################################################################
-# Read the CSV file for GAMLSS data (distribution generated)
+# Read the CSV file for GLB data (distribution generated)
 glb_file_name <- "N4_glb_all_data.csv"
 glb_data <- read.csv(glb_file_name)
 
