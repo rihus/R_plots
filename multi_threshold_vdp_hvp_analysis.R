@@ -91,8 +91,8 @@ print(Spir_N4_hvp)
 cf_vdp_N4s <- read.csv("./IRC740H_2Dspiral_CF/N4_corr_vdp_thresholds_new.csv")
 ctrl_vdp_N4s <- read.csv("./IRC740H_2Dspiral_healthy/N4_corr_vdp_thresholds_new.csv")
 Spir_N4_vdp <- create_thresh_plot(cf_vdp_N4s, ctrl_vdp_N4s, "Spiral: N4 VDP Thresholds",
-                   "Threshold (% of mean)", "Average HVP", 60)
-prit(Spir_N4_vdp)
+                   "Threshold (% of mean)", "Average VDP", 60)
+print(Spir_N4_vdp)
 # Save the plot as a png file in the specified directory
 ggsave("./zR_plots_4ppr/Spir_N4_hvp_thresholds.png", plot = Spir_N4_hvp, width = 4.5, height = 3.25, dpi = 300)
 ggsave("./zR_plots_4ppr/Spir_N4_vdp_thresholds.png", plot = Spir_N4_vdp, width = 4.5, height = 3.25, dpi = 300)
@@ -104,8 +104,8 @@ Spir_FA_hvp <- create_thresh_plot(cf_hvp_FAs, ctrl_hvp_FAs, "Spiral: FA HVP Thre
 print(Spir_FA_hvp)
 cf_vdp_FAs <- read.csv("./IRC740H_2Dspiral_CF/FA_corr_vdp_thresholds_new.csv")
 ctrl_vdp_FAs <- read.csv("./IRC740H_2Dspiral_healthy/FA_corr_vdp_thresholds_new.csv")
-Spir_FA_vdp <- create_thresh_plot(cf_vdp_FAs, ctrl_vdp_FAs, "Spiral: N4 VDP Thresholds",
-                   "Threshold (% of mean)", "Average HVP", 60)
+Spir_FA_vdp <- create_thresh_plot(cf_vdp_FAs, ctrl_vdp_FAs, "Spiral: FA VDP Thresholds",
+                   "Threshold (% of mean)", "Average VDP", 60)
 print(Spir_FA_vdp)
 # Save the plot as a png file in the specified directory
 ggsave("./zR_plots_4ppr/Spir_FA_hvp_thresholds.png", plot = Spir_FA_hvp, width = 4.5, height = 3.25, dpi = 300)
