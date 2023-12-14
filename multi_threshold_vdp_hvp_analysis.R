@@ -25,7 +25,7 @@ create_thresh_plot <- function(df_in1, df_in2, plt_title, x_label, y_label, vlin
     # Plot row_avg1 with coral2 color and error bars
     geom_point(aes(y = row_avg1, color = "CF", shape = "CF"), size = 3) +
     geom_errorbar(aes(ymin = row_avg1 - row_sd1, ymax = row_avg1 + row_sd1),
-                  width = 0.3, color = "coral2") +
+                  width = 0.3, color = "black") +
     # Plot row_avg2
     geom_point(aes(y = row_avg2, color = "Ctrl", shape = "Ctrl"), size = 3) +
     geom_errorbar(aes(ymin = row_avg2 - row_sd2, ymax = row_avg2 + row_sd2),
@@ -51,7 +51,7 @@ create_thresh_plot <- function(df_in1, df_in2, plt_title, x_label, y_label, vlin
       legend.title = element_text(face = "bold")
     ) +
     # Add legend
-    scale_color_manual(values = c("coral2", "darkgreen", "black"),
+    scale_color_manual(values = c("black", "darkgreen", "coral2"),
                        name = "Subjects",
                         labels = c("CF", "Ctrl", "Diff")) +
     scale_shape_manual(values = c("CF" = 17, "Ctrl" = 19, "Diff" = 15),
@@ -68,13 +68,13 @@ create_thresh_plot <- function(df_in1, df_in2, plt_title, x_label, y_label, vlin
 
 ################################################################################
 # ##Load and plot ******************** CARTESIAN
-cf_hvp_N4c <- read.csv("./IRC740H_2Dcartesian_CF/N4_corr_hvp_thresholds_new.csv")
-ctrl_hvp_N4c <- read.csv("./IRC740H_2Dcartesian_healthy/N4_corr_hvp_thresholds_new.csv")
+cf_hvp_N4c <- read.csv("./IRC740H_2Dcartesian_CF/multi_threshold_analysis_results/N4_corr_hvp_thresholds_new.csv")
+ctrl_hvp_N4c <- read.csv("./IRC740H_2Dcartesian_healthy/multi_threshold_analysis_results/N4_corr_hvp_thresholds_new.csv")
 Cart_N4_hvp <- create_thresh_plot(cf_hvp_N4c, ctrl_hvp_N4c, "Cartesian: N4 HVP Thresholds",
                    "Threshold (% of mean)", "Average HVP", 200)
 print(Cart_N4_hvp)
-cf_vdp_N4c <- read.csv("./IRC740H_2Dcartesian_CF/N4_corr_vdp_thresholds_new.csv")
-ctrl_vdp_N4c <- read.csv("./IRC740H_2Dcartesian_healthy/N4_corr_vdp_thresholds_new.csv")
+cf_vdp_N4c <- read.csv("./IRC740H_2Dcartesian_CF/multi_threshold_analysis_results/N4_corr_vdp_thresholds_new.csv")
+ctrl_vdp_N4c <- read.csv("./IRC740H_2Dcartesian_healthy/multi_threshold_analysis_results/N4_corr_vdp_thresholds_new.csv")
 Cart_N4_vdp <- create_thresh_plot(cf_vdp_N4c,ctrl_vdp_N4c, "Cartesian: N4 VDP Thresholds",
                    "Threshold (% of mean)", "Average VDP", 60)
 print(Cart_N4_vdp)
@@ -83,13 +83,13 @@ ggsave("./zR_plots_4ppr/Cart_N4_hvp_thresholds.png", plot = Cart_N4_hvp, width =
 ggsave("./zR_plots_4ppr/Cart_N4_vdp_thresholds.png", plot = Cart_N4_vdp, width = 4.5, height = 3.25, dpi = 300)
 
 # ##Load and plot ******************* SPIRAL
-cf_hvp_N4s <- read.csv("./IRC740H_2Dspiral_CF/N4_corr_hvp_thresholds_new.csv")
-ctrl_hvp_N4s <- read.csv("./IRC740H_2Dspiral_healthy/N4_corr_hvp_thresholds_new.csv")
+cf_hvp_N4s <- read.csv("./IRC740H_2Dspiral_CF/multi_threshold_analysis_results/N4_corr_hvp_thresholds_new.csv")
+ctrl_hvp_N4s <- read.csv("./IRC740H_2Dspiral_healthy/multi_threshold_analysis_results/N4_corr_hvp_thresholds_new.csv")
 Spir_N4_hvp <- create_thresh_plot(cf_hvp_N4s, ctrl_hvp_N4s, "Spiral: N4 HVP Thresholds",
                    "Threshold (% of mean)", "Average HVP", 200)
 print(Spir_N4_hvp)
-cf_vdp_N4s <- read.csv("./IRC740H_2Dspiral_CF/N4_corr_vdp_thresholds_new.csv")
-ctrl_vdp_N4s <- read.csv("./IRC740H_2Dspiral_healthy/N4_corr_vdp_thresholds_new.csv")
+cf_vdp_N4s <- read.csv("./IRC740H_2Dspiral_CF/multi_threshold_analysis_results/N4_corr_vdp_thresholds_new.csv")
+ctrl_vdp_N4s <- read.csv("./IRC740H_2Dspiral_healthy/multi_threshold_analysis_results/N4_corr_vdp_thresholds_new.csv")
 Spir_N4_vdp <- create_thresh_plot(cf_vdp_N4s, ctrl_vdp_N4s, "Spiral: N4 VDP Thresholds",
                    "Threshold (% of mean)", "Average VDP", 60)
 print(Spir_N4_vdp)
@@ -97,15 +97,15 @@ print(Spir_N4_vdp)
 ggsave("./zR_plots_4ppr/Spir_N4_hvp_thresholds.png", plot = Spir_N4_hvp, width = 4.5, height = 3.25, dpi = 300)
 ggsave("./zR_plots_4ppr/Spir_N4_vdp_thresholds.png", plot = Spir_N4_vdp, width = 4.5, height = 3.25, dpi = 300)
 
-cf_hvp_FAs <- read.csv("./IRC740H_2Dspiral_CF/FA_corr_hvp_thresholds_new.csv")
-ctrl_hvp_FAs <- read.csv("./IRC740H_2Dspiral_healthy/FA_corr_hvp_thresholds_new.csv")
+cf_hvp_FAs <- read.csv("./IRC740H_2Dspiral_CF/multi_threshold_analysis_results/FA_corr_hvp_thresholds_new.csv")
+ctrl_hvp_FAs <- read.csv("./IRC740H_2Dspiral_healthy/multi_threshold_analysis_results/FA_corr_hvp_thresholds_new.csv")
 Spir_FA_hvp <- create_thresh_plot(cf_hvp_FAs, ctrl_hvp_FAs, "Spiral: FA HVP Thresholds",
                    "Threshold (% of mean)", "Average HVP", 200)
 print(Spir_FA_hvp)
-cf_vdp_FAs <- read.csv("./IRC740H_2Dspiral_CF/FA_corr_vdp_thresholds_new.csv")
-ctrl_vdp_FAs <- read.csv("./IRC740H_2Dspiral_healthy/FA_corr_vdp_thresholds_new.csv")
+cf_vdp_FAs <- read.csv("./IRC740H_2Dspiral_CF/multi_threshold_analysis_results/FA_corr_vdp_thresholds_new.csv")
+ctrl_vdp_FAs <- read.csv("./IRC740H_2Dspiral_healthy/multi_threshold_analysis_results/FA_corr_vdp_thresholds_new.csv")
 Spir_FA_vdp <- create_thresh_plot(cf_vdp_FAs, ctrl_vdp_FAs, "Spiral: FA VDP Thresholds",
-                   "Threshold (% of mean)", "Average VDP", 60)
+                   "Threshold (% of mean)", "Average VDP", 40)
 print(Spir_FA_vdp)
 # Save the plot as a png file in the specified directory
 ggsave("./zR_plots_4ppr/Spir_FA_hvp_thresholds.png", plot = Spir_FA_hvp, width = 4.5, height = 3.25, dpi = 300)
