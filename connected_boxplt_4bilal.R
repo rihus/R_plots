@@ -1,0 +1,95 @@
+#load ggplot2
+library(ggplot2)
+library(ggpubr)
+library(blandr)
+library(dplyr)
+library(tidyr)
+library(rstatix)
+
+# Set the working directory to the path where your CSV files are located
+setwd("C:/Users/HUSDQ4/OneDrive - cchmc/cincy_work/all_projects_data_work/vdp_analysis/analysis_comparisons")
+# linetypes: 0 = blank, 1 = solid, 2 = dashed, 3 = dotted, 4 = dotdash, 5 = longdash, 6 = twodash
+
+#Colorblind friendly palette:
+cbPalette <- c("#999999","#E69F00","#CC79A7","#F0E442","#56B4E9","#009E73","#0072B2","#D55E00")
+
+###Function for plotting connected boxplot
+connected_bxp <- function(data_in, id = "Subject_id", x_var, y_var, ylim,
+                          palette = NULL, xlab = "", ylab = NULL) {
+  require(ggpubr)
+  # Check if palette is provided
+  if (is.null(palette) || is.null(ylab)) {
+    palette <- c("#999999", "#555555")
+    ylab <- y_var}
+  
+  # Create the ggpaired plot
+  bxp <- ggpaired(data_in, x = x_var, y = y_var, id = id,
+                fill = x_var, palette = palette,
+                width = 0.5, ylim = ylim, line.color = "#000000",
+                line.size = 0.5, legend = "none", xlab = xlab) +
+    ylab(ylab) +
+    theme(panel.border = element_rect(color = "#000000", fill = NA, linewidth = 1),
+          axis.text = element_text(size = 22, color = "#000000", face = "bold"),
+          axis.title = element_text(size = 22, color = "#000000", face = "bold"),
+          axis.line.x = element_line(linewidth = 1), 
+          axis.line.y = element_line(linewidth = 1))
+  print(bxp)
+  return(bxp)
+}
+
+calc_pval <- function(data_in, x_var, y_var, tst = "wilcox", paired = TRUE) {
+  formula <- as.formula(paste(y_var, "~", x_var))
+  ## Statistical test
+  pval <- NULL
+  if (tst == "wilcox") {
+    pval <- data_in %>%
+      wilcox_test(formula, paired = paired) %>%
+      add_significance()
+  } else if (tst == "ttest") {
+    pval <- data_in %>%
+      t_test(formula, paired = paired) %>%
+      add_significance()
+  } else {
+    print("For tst only Wilcoxon (wilcox) or T-test (ttest) are accepted")
+  }
+  print(pval)
+  return(pval)
+}
+
+calc_add_p <- function(data_in, x_var, y_var, fig_handle, py_pos,
+                       tst = "wilcox", paird = TRUE, addp_eq=FALSE) {
+  p_thresh <- calc_pval(data_in, x_var, y_var, tst, paird)
+  p_thresh <- p_thresh %>% add_xy_position(x = x_var)
+  if (addp_eq == TRUE) {plabel = "p={scales::pvalue(p)}"}
+  else {plabel = "p{scales::pvalue(p)}"}
+  bxp_p <- fig_handle + stat_pvalue_manual(p_thresh, label = plabel,
+                                           y.position = py_pos, label.size = 8,
+                                           bracket.size = 0.8,
+                                           tip.length = 0.03, vjust=-0.35)
+  print(bxp_p)
+  return(bxp_p)
+}
+
+################################################################################
+# ##Load the data from both CSV files and arrange it to plot
+N4_gre_cf_vdps <- read.csv("./HyPOINT_phase1_cart_cf/vdp_analysis_results_September2024/N4_combined_vdps.csv")
+
+##Reshape Data to Long Format for ggplot2
+N4_long <- N4_gre_cf_vdps %>%
+  pivot_longer(cols = -Subject_id, names_to = "AnalysisMethod", values_to = "VDP")
+
+##Select data for only "Reader" and one analysis plot
+N4_rdr_thrsh <- N4_long %>% filter(AnalysisMethod %in% c("Reader", "Thresholding"))
+
+##Define y-label of the plot
+y_label <- expression(bold(VDP[GRE-N4]* "(%)"))
+##############################################
+thresh_bxp <- connected_bxp(N4_rdr_thrsh, "Subject_id", "AnalysisMethod",
+                                "VDP", c(0, 35), cbPalette[c(6, 1)], "", y_label)
+##Calculate and add p-value to the plot
+thresh_bxp_p <- calc_add_p(N4_rdr_thrsh, "AnalysisMethod", "VDP", thresh_bxp, 29,
+                           tst = "wilcox", paird = TRUE, addp_eq=FALSE)
+
+##Save figures, with/without p value
+ggsave("./zR_plots_4abs/gre_vdp_rdr_thresh_bxp.png", plot = thresh_bxp, width = 4.5, height = 3.7, dpi = 300)
+ggsave("./zR_plots_4abs/gre_vdp_rdr_thresh_bxp_p.png", plot = thresh_bxp_p, width = 4.5, height = 3.7, dpi = 300)
